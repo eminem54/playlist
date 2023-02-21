@@ -1,0 +1,20 @@
+@import '@/assets/scss/variables';
+
+.wrap {
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding: 6px 12px;
+  border-radius: 3px;
+  font-size: 14px;
+  line-height: 16px;
+  background-color: $color-red;
+}
+
+.img {
+  position: relative;
+  flex: none;
+  margin-right: 4px;
+  width: 16px;
+  height: 16px;
+}

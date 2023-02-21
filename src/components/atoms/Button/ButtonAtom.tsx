@@ -1,12 +1,12 @@
-import React from "react";
+import React from 'react';
 
-type Props = {
+export type ButtonProps = {
   children: string | React.ReactNode;
   className?: string;
   onClick?(): void;
 };
 
-const ButtonAtom = ({ children, className, onClick }: Props) => {
+const ButtonAtom = ({ children, className, onClick }: ButtonProps) => {
   return (
     <button type="button" className={className} onClick={onClick}>
       {children}

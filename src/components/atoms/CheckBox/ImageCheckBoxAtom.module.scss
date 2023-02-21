@@ -1,0 +1,21 @@
+@import '@/assets/scss/mixin';
+@import '@/assets/scss/variables';
+
+.input {
+  @include blind;
+}
+
+.label {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  box-sizing: border-box;
+
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.img {
+  margin-right: 4px;
+}

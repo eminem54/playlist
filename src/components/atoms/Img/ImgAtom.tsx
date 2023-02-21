@@ -1,14 +1,14 @@
-import React, { useMemo } from "react";
-import Image, { ImageProps } from "next/image";
+import React, { useMemo } from 'react';
+import Image, { ImageProps } from 'next/image';
 
-type Props = {
+export type ImgProps = {
   src: string;
-  alt: string;
+  alt?: string;
   width?: number;
   height?: number;
-} & ImageProps;
+} & Omit<ImageProps, 'alt'>;
 
-const ImgAtom = ({ src, width, height, alt, ...props }: Props) => {
+const ImgAtom = ({ src, width, height, alt, ...props }: ImgProps) => {
   const useFill = useMemo(() => {
     return width && height ? false : true;
   }, [width, height]);
@@ -22,7 +22,7 @@ const ImgAtom = ({ src, width, height, alt, ...props }: Props) => {
       src={src}
       width={useFill ? undefined : width}
       height={useFill ? undefined : height}
-      alt={alt || ""}
+      alt={alt || ''}
       fill={useFill}
       loader={customLoader}
       {...props}

@@ -1,3 +1,15 @@
-.link {
-  font-size: 20px;
+@import '@/assets/scss/variables.scss';
+
+.wrap {
+  position: relative;
+  display: flex;
+  padding-top: $pc-header-height;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  box-sizing: border-box;
+}
+
+.list_box {
+  padding-top: 20px;
 }

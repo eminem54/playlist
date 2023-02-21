@@ -16,3 +16,42 @@
     content: '';
   }
 }
+
+@mixin ellipsis($lines: 1, $line-height: null, $force-clamp: false) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  @if $lines==1 {
+    max-width: 100%;
+    white-space: nowrap;
+    word-wrap: normal; // ie10 fixed
+  } @else {
+    $height: $line-height * $lines * 10;
+
+    display: block;
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+    word-break: break-all;
+    word-wrap: break-word;
+    line-height: $line-height + rem;
+
+    @if $force-clamp==true {
+      height: $height + px;
+    } @else {
+      max-height: $height + px;
+    }
+  }
+}
+
+@mixin blind {
+  overflow: hidden;
+  position: absolute;
+  clip: rect(0 0 0 0);
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  font-size: medium;
+  line-height: normal;
+  white-space: nowrap;
+}

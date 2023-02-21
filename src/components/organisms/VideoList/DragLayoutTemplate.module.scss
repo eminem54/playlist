@@ -1,0 +1,28 @@
+@import '@/assets/scss/mixin';
+@import '@/assets/scss/variables';
+
+.wrap {
+  background-color: rgba($color-gray-2, 0.5);
+}
+
+.btn {
+  @include ellipsis;
+
+  height: 44px;
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  font-size: 20px;
+  line-height: 22px;
+  letter-spacing: 0.58px;
+  text-align: left;
+  color: $color-real-black;
+
+  & + & {
+    margin-top: 6px;
+  }
+}
+
+.icon {
+  margin-right: 4px;
+}

@@ -1,0 +1,26 @@
+@import '@/assets/scss/variables';
+
+.btn {
+  display: block;
+  width: 100%;
+  height: 44px;
+  padding: 0 20px;
+  font-size: 24px;
+
+  letter-spacing: 0.58px;
+  text-align: left;
+
+  &:hover {
+    background-color: $color-gray-2;
+    color: $color-real-black;
+  }
+
+  &.pressed {
+    background-color: $color-gray-1;
+    color: $color-real-black;
+  }
+
+  &.drop_over {
+    background-color: rgba(silver, 0.7);
+  }
+}

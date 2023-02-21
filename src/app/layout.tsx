@@ -1,10 +1,11 @@
-import './globals.css'
+'use client';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode
-}) {
+import { RecoilRoot } from 'recoil';
+import '@/assets/scss/base.scss';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       {/*
@@ -12,7 +13,11 @@ export default function RootLayout({
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body>{children}</body>
+      <body>
+        <DndProvider backend={HTML5Backend}>
+          <RecoilRoot>{children}</RecoilRoot>
+        </DndProvider>
+      </body>
     </html>
-  )
+  );
 }

@@ -4,7 +4,6 @@ export function hashURLToObject(url: string) {
   if (hash.length < 2) return { access_token: '' };
 
   const paramList = hash[1].split('&');
-
   const obj = paramList.reduce(
     (acc, item) => {
       const [key, value] = item.split('=');

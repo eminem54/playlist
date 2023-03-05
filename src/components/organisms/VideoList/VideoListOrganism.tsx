@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import styles from './VideoListOrganism.module.scss';
 import useVideoListRecoil from '@/hooks-recoil/useVideoListRecoil';
 import IconButtonAtom from '@/components/atoms/Button/IconButtonAtom';
@@ -7,26 +7,24 @@ import DragLayer from './DragLayer';
 
 const VideoListOrganism = () => {
   const { videoList, isVideoListEmpty } = useVideoListRecoil();
+  const containerRef = useRef(null);
+
+  useEffect(() => {
+    document.getElementById('zz')?.scrollTo(0, 0);
+  }, [videoList]);
 
   if (isVideoListEmpty()) {
-    return (
-      <strong>
-        재생목록을 선택해 주세요.
-        <IconButtonAtom src="/images/common/icon_checkbox_on.svg">hello</IconButtonAtom>
-      </strong>
-    );
+    return <strong>재생목록을 선택해 주세요.</strong>;
   }
 
   return (
     <>
       <DragLayer />
-      <ul className={styles.wrap}>
+      <ul className={styles.wrap} ref={containerRef}>
         {videoList.map((videoToken) => (
           <React.Fragment key={videoToken.etag}>
-            {videoToken.items?.map((video) => (
-              <>
-                <VideoItem key={video.id} id={video.id} title={video.snippet.title} order={video.snippet.position} />
-              </>
+            {videoToken.items?.map(({ id, snippet }) => (
+              <VideoItem key={id} id={id} resourceId={snippet.resourceId.videoId} title={snippet.title} order={snippet.position} />
             ))}
           </React.Fragment>
         ))}

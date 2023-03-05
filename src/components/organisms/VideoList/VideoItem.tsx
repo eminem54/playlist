@@ -3,32 +3,38 @@ import React, { useState, useEffect } from 'react';
 import styles from './VideoItem.module.scss';
 import { useDrag } from 'react-dnd';
 import { DragVideoItemType } from '@/const/type';
-import useDragRecoil from '@/hooks-recoil/useDragRecoil';
+import useDragRecoil from '@/hooks-recoil/useCheckedVideoRecoil';
 import { getEmptyImage } from 'react-dnd-html5-backend';
 import ButtonAtom from '@/components/atoms/Button/ButtonAtom';
 
 type Props = {
   id: string;
+  resourceId: string;
   order: number;
   title: string;
 };
 
-const VideoItem = ({ id, title, order }: Props) => {
-  const { dragItemCart, setDragItemCart } = useDragRecoil();
+const VideoItem = ({ id, resourceId, title, order }: Props) => {
+  const { checkedVideoCart, setCheckedVideoCart, sortCartByOrder } = useDragRecoil();
   const [isSelected, setIsSelected] = useState<boolean>(false);
 
   const [collected, dragRef, preview] = useDrag({
     type: DragVideoItemType.VIDEO,
-    end: (item, monitor) => {
-      setDragItemCart([]);
+    item: (item) => {
+      if (!checkedVideoCart.find((item) => item.resourceId === resourceId)) {
+        return;
+      }
+      // [ask] 병목 드래그 시작할 때마다 정렬 로직이 돌아가는데, 병목을 줄이고 싶습니다, heap queue 써야할까요? 정렬되었다는 상태를 하나 추가할까요?
+      sortCartByOrder();
+      return item;
     },
   });
 
   const handleClickVideo = () => {
     if (!isSelected) {
-      setDragItemCart([...dragItemCart, { id, order, title }]);
+      setCheckedVideoCart([...checkedVideoCart, { id, resourceId, order, title }]);
     } else {
-      setDragItemCart(dragItemCart.filter((video) => video.id !== id));
+      setCheckedVideoCart(checkedVideoCart.filter((video) => video.resourceId !== resourceId));
     }
     setIsSelected(!isSelected);
   };

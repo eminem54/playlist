@@ -8,6 +8,7 @@ import { useRouter } from 'next/navigation';
 const Login = () => {
   const router = useRouter();
   const { access_token } = hashURLToObject(window.location.href);
+  console.log(access_token);
   const { isEmptyToken, accessToken, setAccessToken } = useAccessTokenRecoil();
 
   useEffect(() => {

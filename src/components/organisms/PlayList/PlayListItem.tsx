@@ -3,10 +3,11 @@ import styles from './PlayListItem.module.scss';
 import ButtonAtom from '@/components/atoms/Button/ButtonAtom';
 import useAccessTokenRecoil from '@/hooks-recoil/useAccessTokenRecoil';
 import useVideoListRecoil from '@/hooks-recoil/useVideoListRecoil';
-import axios from 'axios';
 import clsx from 'clsx';
 import { useDrop } from 'react-dnd';
 import { DragVideoItemType } from '@/const/type';
+import useDragRecoil from '@/hooks-recoil/useCheckedVideoRecoil';
+import { requestPlayListItems, insertVideoToPlaylist, deletePlaylistVideo } from '@/api/youtube';
 
 type Props = {
   id: string;
@@ -17,39 +18,42 @@ type Props = {
 
 const PlayListItem = ({ id, title, isSelected, setSelectedListId }: Props) => {
   const { accessToken } = useAccessTokenRecoil();
-  const { setVideoList } = useVideoListRecoil();
+  const { videoList, setVideoList } = useVideoListRecoil();
+  const { checkedVideoCart, initialCheckedCart } = useDragRecoil();
 
-  const [{ isOver, canDrop }, drag] = useDrop({
+  const [{ isOver }, drag] = useDrop({
     accept: DragVideoItemType.VIDEO,
+    drop: async (item, monitor) => {
+      const deletedIdArray: String[] = [];
+
+      for (const dropItem of checkedVideoCart) {
+        await insertVideoToPlaylist(id, dropItem.resourceId, accessToken);
+        const response = await deletePlaylistVideo(dropItem.id, accessToken);
+        if (response.status === 204) {
+          deletedIdArray.push(dropItem.id);
+        }
+      }
+
+      const newVideoList = videoList.map((list) => {
+        const newItems = list.items.filter(({ id }) => !deletedIdArray.includes(id));
+        return { ...list, items: newItems };
+      });
+      setVideoList(newVideoList);
+      initialCheckedCart();
+    },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
-      canDrop: monitor.canDrop(),
     }),
   });
 
-  const handleClickListButton = (id: string) => {
-    axios
-      .get('https://www.googleapis.com/youtube/v3/playlistItems', {
-        headers: {
-          Authorization: 'Bearer ' + accessToken,
-        },
-        params: {
-          maxResults: 50,
-          playlistId: id,
-          part: 'id, snippet',
-        },
-      })
-      .then((response) => {
-        setVideoList([response.data]);
-        console.log(response, 'playList handler');
-      });
-  };
-
-  const handleClickBtn = () => {
+  const handleClickBtn = async () => {
     if (!isSelected) {
-      handleClickListButton(id);
+      const responseItems = await requestPlayListItems(id, accessToken);
+      console.log(responseItems, 100);
+      setVideoList([responseItems]);
+      setSelectedListId(id);
+      initialCheckedCart();
     }
-    setSelectedListId(id);
   };
 
   return (

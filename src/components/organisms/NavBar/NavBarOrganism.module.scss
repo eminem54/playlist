@@ -1,0 +1,23 @@
+@import '@/assets/scss/variables';
+
+.wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: green;
+  height: $pc-header-height;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.login {
+  color: #fff;
+  font-weight: 700;
+  font-size: 24px;
+  border-radius: 6px;
+  background-color: pink;
+  padding: 4px 8px;
+}
